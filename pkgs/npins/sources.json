@@ -20,9 +20,9 @@
         "repo": "Aimarekins-Spicetify-Extensions"
       },
       "branch": "main",
-      "revision": "b242f9e8f31fe9d8c9dc799338d5b0b0efe471c8",
-      "url": "https://github.com/Aimarekin/Aimarekins-Spicetify-Extensions/archive/b242f9e8f31fe9d8c9dc799338d5b0b0efe471c8.tar.gz",
-      "hash": "0ima3dgf87wi4fxk402dxzx1v1p422gcybba14fh69k99aizjhly"
+      "revision": "fd9feb894d004215e2baeb301f85a3f14a443865",
+      "url": "https://github.com/Aimarekin/Aimarekins-Spicetify-Extensions/archive/fd9feb894d004215e2baeb301f85a3f14a443865.tar.gz",
+      "hash": "1k7fwxm2x2pnpx67bfv62kjm5q3zln879zh7lpqnwpz1235xh4yd"
     },
     "autoVolumeSrc": {
       "type": "Git",
@@ -107,9 +107,9 @@
         "repo": "Spicetify"
       },
       "branch": "main",
-      "revision": "aa86078a691096a36870b8486af18468704b9f88",
-      "url": "https://github.com/Comfy-Themes/Spicetify/archive/aa86078a691096a36870b8486af18468704b9f88.tar.gz",
-      "hash": "0x9618x0wd4p5qpbhww90s6lyi9biivgb5n26fa9ybb2bl3yh9in"
+      "revision": "b9b40b882281d82d9d42aeeb163d25280b18d343",
+      "url": "https://github.com/Comfy-Themes/Spicetify/archive/b9b40b882281d82d9d42aeeb163d25280b18d343.tar.gz",
+      "hash": "0lg3x0hvx9hxr3l55a4vxf9b85mc0hqd53snl21w39f4c7ydf50p"
     },
     "copyToClipboardSrc": {
       "type": "Git",
@@ -203,9 +203,9 @@
         "repo": "spicetify-hide-podcasts"
       },
       "branch": "main",
-      "revision": "30b164971c3d49ac456040269a2263e843ad1f7d",
-      "url": "https://github.com/theRealPadster/spicetify-hide-podcasts/archive/30b164971c3d49ac456040269a2263e843ad1f7d.tar.gz",
-      "hash": "120r08zr70ylsxjsxy0g7zw5cjyvrzs2l2khfvxkxhqhq4l43j1p"
+      "revision": "a0752e5ef6f7bfd7399a0a795a437c0b398246ba",
+      "url": "https://github.com/theRealPadster/spicetify-hide-podcasts/archive/a0752e5ef6f7bfd7399a0a795a437c0b398246ba.tar.gz",
+      "hash": "0qwiqrllqvjzq5sq1cix444lvccsbwzxpgxq4s8sf19l1h91s6lv"
     },
     "historySidebarSrc": {
       "type": "Git",
@@ -275,9 +275,9 @@
         "repo": "spicetify-marketplace"
       },
       "branch": "dist",
-      "revision": "5753b3adab1a250e02417ed04e44e7c9d6720011",
-      "url": "https://github.com/spicetify/spicetify-marketplace/archive/5753b3adab1a250e02417ed04e44e7c9d6720011.tar.gz",
-      "hash": "05myh2723wlzpcsjfrqw8l94k2jlwjs592p43bn2bficzzdjvwyy"
+      "revision": "7c6169c0ce04d15403eea0e3a3915f2609823dfc",
+      "url": "https://github.com/spicetify/spicetify-marketplace/archive/7c6169c0ce04d15403eea0e3a3915f2609823dfc.tar.gz",
+      "hash": "0764g6hlbsy14rxf48yn25zvdhd607axzbvmrprq5ygx515bb7mp"
     },
     "nameThatTuneSrc": {
       "type": "Git",
@@ -322,10 +322,10 @@
         "owner": "spicetify",
         "repo": "cli"
       },
-      "branch": "master",
-      "revision": "e23e0f252b6d1641149620cb9f04a815fd5818f4",
-      "url": "https://github.com/spicetify/cli/archive/e23e0f252b6d1641149620cb9f04a815fd5818f4.tar.gz",
-      "hash": "1b2j78wjhp7hizw7cgj5jdbjzhbasi1n73sl7lcr60xghd71lx7b"
+      "branch": "main",
+      "revision": "24630891ffbd47d87aab3cba7ea74f322af31e4c",
+      "url": "https://github.com/spicetify/cli/archive/24630891ffbd47d87aab3cba7ea74f322af31e4c.tar.gz",
+      "hash": "18zp7i8s1mpw8w7ma638pjskzx1bmvm3dqrkgj2cgq811nfrkyi8"
     },
     "officialThemes": {
       "type": "Git",
@@ -335,9 +335,9 @@
         "repo": "spicetify-themes"
       },
       "branch": "master",
-      "revision": "cbc5231181b86effc2368aa2a55b61a041061cdd",
-      "url": "https://github.com/spicetify/spicetify-themes/archive/cbc5231181b86effc2368aa2a55b61a041061cdd.tar.gz",
-      "hash": "1nk4d38bx6yyhlvwgy6ki9iqwmlc7avkffhwd8yc76wfb1ahddii"
+      "revision": "11e89d411ba1cc77ef89ccf65f301302c3c3d566",
+      "url": "https://github.com/spicetify/spicetify-themes/archive/11e89d411ba1cc77ef89ccf65f301302c3c3d566.tar.gz",
+      "hash": "08c2a9c42wq1i8c9c06wc8az3d3hxvbx2l1q7cmfxy0mgn9lcyvb"
     },
     "omniSrc": {
       "type": "Git",
@@ -407,9 +407,9 @@
         "repo": "spicetify-extensions"
       },
       "branch": "main",
-      "revision": "e287557c119f7962383ca4c41caadd7329211a55",
-      "url": "https://github.com/rxri/spicetify-extensions/archive/e287557c119f7962383ca4c41caadd7329211a55.tar.gz",
-      "hash": "1z701fm0rc66pqrbmaxz9b1wrrvdpblrqs84cm42h10mymhnfl0v"
+      "revision": "9ae759120449e3f2431175f7f44ce162da112c92",
+      "url": "https://github.com/rxri/spicetify-extensions/archive/9ae759120449e3f2431175f7f44ce162da112c92.tar.gz",
+      "hash": "0081q8kj8dq3jwmlcx9hf65xiivz30kyvjwk9ba0kkn7szyqm4cz"
     },
     "spotifyCanvasSrc": {
       "type": "Git",
