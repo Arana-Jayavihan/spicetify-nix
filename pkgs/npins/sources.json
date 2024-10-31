@@ -195,6 +195,18 @@
       "url": "https://github.com/timll/spotify-group-session/archive/bc93e673d7efaa0294eca69321de33dc1dc8bdc3.tar.gz",
       "hash": "0s4psn6ckx91ggizig8l6l3pf77b2ncbsgh16j7b518a9klib38r"
     },
+    "hazySrc": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "Astromations",
+        "repo": "Hazy"
+      },
+      "branch": "main",
+      "revision": "2fe1599e18cd0bfac02f8a846772574f5059715b",
+      "url": "https://github.com/Astromations/Hazy/archive/2fe1599e18cd0bfac02f8a846772574f5059715b.tar.gz",
+      "hash": "075fz5d2104zaavvbsv0yn81p2nixki271dfkgacp61di1a421rq"
+    },
     "hidePodcastsSrc": {
       "type": "Git",
       "repository": {
@@ -267,6 +279,18 @@
       "url": "https://github.com/hroland/spicetify-show-local-files/archive/1bfd2fc80385b21ed6dd207b00a371065e53042e.tar.gz",
       "hash": "01gy16b69glqcalz1wm8kr5wsh94i419qx4nfmsavm4rcvcr3qlx"
     },
+    "lucidSrc": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "sanoojes",
+        "repo": "Spicetify-Lucid"
+      },
+      "branch": "main",
+      "revision": "2b474f32f3c4599549fad175a60a4f479bc89658",
+      "url": "https://github.com/sanoojes/Spicetify-Lucid/archive/2b474f32f3c4599549fad175a60a4f479bc89658.tar.gz",
+      "hash": "0ra2icjvhryx8r5dhbaba4h7xngm0hlkxfrimwima7jxxf3a3rpv"
+    },
     "marketplaceSrc": {
       "type": "Git",
       "repository": {
@@ -323,9 +347,9 @@
         "repo": "cli"
       },
       "branch": "main",
-      "revision": "24630891ffbd47d87aab3cba7ea74f322af31e4c",
-      "url": "https://github.com/spicetify/cli/archive/24630891ffbd47d87aab3cba7ea74f322af31e4c.tar.gz",
-      "hash": "18zp7i8s1mpw8w7ma638pjskzx1bmvm3dqrkgj2cgq811nfrkyi8"
+      "revision": "ece3590bfb3f4b6684c766665dc47bd6c10734e5",
+      "url": "https://github.com/spicetify/cli/archive/ece3590bfb3f4b6684c766665dc47bd6c10734e5.tar.gz",
+      "hash": "0lflm7byba31hy7gvx88krpjpfq44ra1vdksfzwlaa09gbwpnw70"
     },
     "officialThemes": {
       "type": "Git",
@@ -350,6 +374,18 @@
       "revision": "253ae45d2cac2dc3d92a43193ea8f6d9e7e1d3aa",
       "url": "https://github.com/getomni/spicetify/archive/253ae45d2cac2dc3d92a43193ea8f6d9e7e1d3aa.tar.gz",
       "hash": "0zvngrwikdx5whcf29yqgzxiwaqxr2bmsy5j0c1ffz3s9zikx0p4"
+    },
+    "onekoSrc": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "kyrie25",
+        "repo": "spicetify-oneko"
+      },
+      "branch": "master",
+      "revision": "589a8cc3a3939b8c9fc4f2bd087ed433e9af5002",
+      "url": "https://github.com/kyrie25/spicetify-oneko/archive/589a8cc3a3939b8c9fc4f2bd087ed433e9af5002.tar.gz",
+      "hash": "95eb2dadfe2c4b019b06acbed09eeee48a14eb134a1e1df920a671b7fa61a4d6"
     },
     "orchisSrc": {
       "type": "Git",
@@ -407,9 +443,9 @@
         "repo": "spicetify-extensions"
       },
       "branch": "main",
-      "revision": "9ae759120449e3f2431175f7f44ce162da112c92",
-      "url": "https://github.com/rxri/spicetify-extensions/archive/9ae759120449e3f2431175f7f44ce162da112c92.tar.gz",
-      "hash": "0081q8kj8dq3jwmlcx9hf65xiivz30kyvjwk9ba0kkn7szyqm4cz"
+      "revision": "7f97c7645f579f91d87cb9a66c496d552d5ba4e8",
+      "url": "https://github.com/rxri/spicetify-extensions/archive/7f97c7645f579f91d87cb9a66c496d552d5ba4e8.tar.gz",
+      "hash": "1bcp7pxab8nwx3xmsiyzvrn3c417837gh22nyq0mrwfd5c0vay97"
     },
     "spotifyCanvasSrc": {
       "type": "Git",

@@ -20,7 +20,6 @@ programs.spicetify.theme = {
   injectCss = true;
   injectThemeJs = true;
   replaceColors = true;
-  sidebarConfig = true;
   homeConfig = true;
   overwriteAssets = false;
   additonalCss = "";
@@ -109,8 +108,14 @@ Dark theme created by Rocketseat. [Source](https://github.com/getomni/spicetify)
 ![preview](https://github.com/getomni/spicetify/blob/main/screenshot.png)
 ### bloom
 Another Spicetify theme inspired by Microsoft's Fluent Design System. [Source](https://github.com/nimsandu/spicetify-bloom)
+![preview](https://github.com/sanoojes/Spicetify-Lucid/blob/main/assets/images/lucid-control-nav.png)
+### lucid
+A minimal and dynamic Bloom-inspired theme for Spicetify. [Source](https://github.com/sanoojes/Spicetify-Lucid)
 ![preview](https://github.com/nimsandu/spicetify-bloom/blob/main/images/dark.png)
 ### orchis
 Simple dark green/grey theme. [Source](https://github.com/canbeardig/Spicetify-Orchis-Colours-v2)
 ![preview](https://github.com/canbeardig/Spicetify-Orchis-Colours-v2/blob/main/screenshot.png)
+### hazy
+A translucent spicetify theme. [Source](https://github.com/Astromations/Hazy)
+![preview](https://github.com/Astromations/Hazy/blob/main/hazy_home.png)
 

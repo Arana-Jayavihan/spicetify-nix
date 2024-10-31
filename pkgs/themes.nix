@@ -26,7 +26,6 @@
       inherit name;
       src = "${sources.officialThemes}/${name}";
 
-      sidebarConfig = false;
     }
   )
 )
@@ -38,7 +37,6 @@
       src = "${sources.officialThemes}/BurntSienna";
       extraPkgs = [ pkgs.montserrat ];
 
-      sidebarConfig = false;
     };
 
     catppuccin = {
@@ -46,7 +44,7 @@
       src = "${sources.catppuccinSrc}/catppuccin";
 
       overwriteAssets = true;
-      sidebarConfig = false;
+
     };
     dribbblish = {
       name = "Dribbblish";
@@ -83,7 +81,6 @@
         "xpui.js_repl_8008" = ",\${1}32";
       };
 
-      sidebarConfig = false;
     };
 
     dreary = {
@@ -110,7 +107,6 @@
       injectCss = false;
       replaceColors = false;
 
-      sidebarConfig = false;
     };
 
     fluent = {
@@ -119,7 +115,6 @@
 
       overwriteAssets = true;
 
-      sidebarConfig = false;
       patches = {
         "xpui.js_find_8008" = ",(\\w+=)32";
         "xpui.js_repl_8008" = ",\${1}56";
@@ -136,7 +131,6 @@
       name = "DefaultDynamic";
       src = sources.defaultDynamicSrc;
 
-      sidebarConfig = false;
       requiredExtensions = [
         {
           src = sources.defaultDynamicSrc;
@@ -157,7 +151,6 @@
       name = "RetroBlur";
       src = sources.retroBlurSrc;
 
-      sidebarConfig = false;
     };
 
     # BROKEN. no clue why
@@ -167,7 +160,6 @@
 
       overwriteAssets = true;
 
-      sidebarConfig = false;
       requiredExtensions = [
         {
           src = sources.omniSrc;
@@ -180,7 +172,19 @@
       name = "Bloom";
       src = "${sources.bloomSrc}/src";
       overwriteAssets = true;
-      sidebarConfig = false;
+
+    };
+    # originally based on bloom
+    lucid = {
+      name = "Lucid";
+      src = "${sources.lucidSrc}/src";
+      overwriteAssets = true;
+      requiredExtensions = [
+        {
+          src = "${sources.lucidSrc}/src";
+          name = "theme.js";
+        }
+      ];
     };
 
     orchis = {
@@ -188,7 +192,6 @@
       src = "${sources.orchisSrc}/DarkGreen";
       extraPkgs = [ pkgs.fira ];
 
-      sidebarConfig = false;
     };
 
     dracula = {
@@ -196,14 +199,13 @@
       src = "${sources.draculaSrc}/Dracula";
 
       injectCss = false;
-      sidebarConfig = false;
+
     };
 
     nord = {
       name = "Nord";
       src = "${sources.nordSrc}/Nord";
 
-      sidebarConfig = false;
     };
 
     comfy = {
@@ -211,7 +213,7 @@
       src = "${sources.comfySrc}/Comfy";
 
       overwriteAssets = true;
-      sidebarConfig = false;
+
       requiredExtensions = [
         {
           src = "${sources.comfySrc}/Comfy";
@@ -225,6 +227,17 @@
       '';
     };
 
+    hazy = {
+      name = "Hazy";
+      src = sources.hazySrc;
+      requiredExtensions = [
+        {
+          name = "hazy.js";
+          src = "${sources.hazySrc}";
+        }
+      ];
+    };
+
     # theres a thing at https://github.com/itsmeow/Spicetify-Canvas
     # about getting a custom build of chromium or something. I am NOT doing that
     # ... but maybe one day if someone asks
@@ -235,7 +248,6 @@
       src = "${sources.spotifyCanvasSrc}/Themes/canvas";
 
       replaceColors = false;
-      sidebarConfig = false;
 
       requiredExtensions = [
         {
