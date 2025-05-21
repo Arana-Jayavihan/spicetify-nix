@@ -3,54 +3,73 @@ name: update_deps
 on:
   workflow_dispatch: #allow manual triggering
   schedule:
-      - cron: "0 4 * * *"
+      - cron: "0 4 * * 0"
 jobs:
   update_deps:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v4.2.2
-      - uses: DeterminateSystems/nix-installer-action@v16
-      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - name: checkout
+        uses: actions/checkout@v4.2.2
+      - uses: cachix/install-nix-action@v31
       - name: setup git
         run: | 
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-      - name: update
+      - uses: cachix/cachix-action@v16
+        with:
+          name: spicetify-nix
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+
+      - id: flake
+        name: flake
         run: |
-          MESSAGE=""
+          MESSAGE="
+          flake input updates:
+          $(nix flake update --no-warn-dirty 2>&1 | { grep -v 'unpacking.*' || true; } | sed '1d')"
 
-          nix flake update --no-warn-dirty --commit-lock-file
-
-          if git rev-parse -q HEAD^; then
-
-            MESSAGE="$(git -P log --pretty=format:"%s%n%b" -1)"
-
-            git reset --soft HEAD^
+          if [ -n "$(git diff-files 2>&1)" ]; then
+            git add -A
+            {
+              echo "message<<EOF"
+              echo "$MESSAGE"
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
           fi
 
-          if NPINS=$(nix run nixpkgs#npins -- -d ./pkgs/npins update -f | grep -E '[^\(no changes\)]*url.*'); then
-            MESSAGE="$MESSAGE
+      - id: npins
+        name: npins
+        run: |
+          MESSAGE="
+          npins updates:
+            $(nix run nixpkgs#npins -- -d ./pkgs/npins update -f 2>&1 | { grep '.*Changes:$\|.*url:.*' || true; })"
 
-          npins url updates:
-          $NPINS"
+          if [ -n "$(git diff-files 2>&1)" ]; then
+            git add -A
+            {
+              echo "message<<EOF"
+              echo "$MESSAGE"
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
           fi
-
-          if [ -z "$MESSAGE" ]; then
+      - name: fetcher
+        run: |
+          pushd pkgs
+          nix run .#fetcher
+          popd
+      - name: Commit and push
+        run: |
+          MESSAGE="
+          ${{ steps.flake.outputs.message }}
+          ${{ steps.npins.outputs.message }}
+          "
+          if [[ "$MESSAGE" =~ ^[[:space:]]*$ ]]; then
             exit 0
           fi
 
-          pushd pkgs
-
-          nix run .#fetcher
-
-          popd
-          
-          git add -A
+          # Check if a small config builds
+          nix build .#test
 
           git commit -m "CI update $(date -I)" -m "$MESSAGE"
-
-          git push origin HEAD:${{ github.ref_name }}
-
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          git push origin 'HEAD:${{ github.ref_name }}'

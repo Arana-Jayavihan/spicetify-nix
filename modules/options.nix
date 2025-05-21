@@ -1,19 +1,17 @@
-{
-  self,
-  isNixOSModule ? false,
-}:
+self:
 {
   lib,
   pkgs,
   config,
+  options,
   ...
 }:
 let
-  cfg = config.programs.spicetify;
-  spicePkgs = self.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+  spicePkgs = self.packages or self.legacyPackages.${pkgs.stdenv.system};
+
   extensionType = lib.types.either lib.types.pathInStore (
     lib.types.submodule {
-      freeformType = lib.types.attrs;
+      freeformType = lib.types.attrsOf lib.types.anything;
       options = {
         src = lib.mkOption {
           type = lib.types.pathInStore;
@@ -30,26 +28,41 @@ let
   );
 in
 {
-  options.programs.spicetify = {
-    enable = lib.mkEnableOption "Spicetify a modified Spotify.";
+  imports = [
+    (pkgs.path + "/nixos/modules/misc/assertions.nix")
 
-    dontInstall = lib.mkEnableOption "outputting spiced spotify to config.programs.spicetify.spicedSpotify, but not installing it.";
+    (lib.mkRemovedOptionModule [ "dontInstall" ] ''
+      set 'enable = false;' instead.
+    '')
+  ];
+
+  options = {
+    enable = lib.mkEnableOption "Spicetify a modified Spotify.";
 
     spicedSpotify = lib.mkOption {
       type = lib.types.package;
+      description = "The final spotify package after spicing.";
       readOnly = true;
     };
 
     createdPackages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
+      description = ''
+        A list of all generated packages containing the spiced spotify and extra packages from the current theme.
+      '';
+      default = [ config.spicedSpotify ] ++ config.theme.extraPkgs;
+      defaultText = lib.literalExpression ''
+        [ spicedSpotify ] ++ theme.extraPkgs
+      '';
       readOnly = true;
     };
 
     theme = lib.mkOption {
+      description = "";
       inherit (spicePkgs.themes) default;
 
       type = lib.types.submodule {
-        freeformType = lib.types.attrs;
+        freeformType = lib.types.attrsOf lib.types.anything;
         options = {
           name = lib.mkOption {
             type = lib.types.str;
@@ -74,6 +87,7 @@ in
             '';
           };
           requiredExtensions = lib.mkOption {
+            description = "";
             type = lib.types.listOf extensionType;
             default = [ ];
           };
@@ -104,26 +118,33 @@ in
 
           # some config values that can be specified per-theme
           injectCss = lib.mkOption {
+            description = "";
             type = lib.types.bool;
             default = true;
           };
           injectThemeJs = lib.mkOption {
+
+            description = "";
             type = lib.types.bool;
             default = true;
           };
           replaceColors = lib.mkOption {
+            description = "";
             type = lib.types.bool;
             default = true;
           };
           homeConfig = lib.mkOption {
+            description = "";
             type = lib.types.bool;
             default = true;
           };
           overwriteAssets = lib.mkOption {
+            description = "";
             type = lib.types.bool;
             default = false;
           };
           additionalCss = lib.mkOption {
+            description = "";
             type = lib.types.lines;
             default = "";
           };
@@ -133,11 +154,7 @@ in
 
     spotifyPackage = lib.mkPackageOption pkgs "spotify" { };
 
-    spotifywmPackage = lib.mkPackageOption pkgs "spotifywm" { };
-
     spicetifyPackage = lib.mkPackageOption pkgs "spicetify-cli" { };
-
-    windowManagerPatch = lib.mkEnableOption "preloading the spotifywm patch";
 
     extraCommands = lib.mkOption {
       type = lib.types.lines;
@@ -150,6 +167,7 @@ in
       default = [ ];
       description = ''
         A list of extensions.
+        See https://spicetify.app/docs/advanced-usage/extensions/.
       '';
       example = ''
         [
@@ -167,14 +185,18 @@ in
       '';
     };
     enabledCustomApps = lib.mkOption {
+      description = ''
+        Custom apps to add to the spice.
+        See https://spicetify.app/docs/development/custom-apps.
+      '';
       type = lib.types.listOf (
         lib.types.submodule {
-          freeformType = lib.types.attrs;
+          freeformType = lib.types.attrsOf lib.types.anything;
           options = {
             src = lib.mkOption {
               type = lib.types.pathInStore;
               description = "Path to the folder containing the app code.";
-              example = ''
+              example = lib.literalExpression ''
                 pkgs.fetchFromGitHub {
                   owner = "hroland";
                   repo = "spicetify-show-local-files";
@@ -197,140 +219,142 @@ in
 
     colorScheme = lib.mkOption {
       type = lib.types.str;
-      default = if cfg.customColorScheme == { } then "" else "custom";
+      description = ''
+        Spicetify color scheme to use, given a specific `theme`.
+        If using `customColorScheme`, leave this as default `"custom"`.
+      '';
+      default = if config.customColorScheme != { } then "custom" else "";
     };
     customColorScheme = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
+      description = ''
+        Custom scheme used to generate a corresponding `color.ini`.
+        See https://spicetify.app/docs/development/themes.
+      '';
       default = { };
     };
     enabledSnippets = lib.mkOption {
       type = lib.types.listOf lib.types.str;
+      description = ''
+        Snippets to add to the spice.
+        See https://github.com/spicetify/marketplace/blob/main/resources/snippets.json.
+      '';
       default = [ ];
     };
 
     spotifyLaunchFlags = lib.mkOption {
       type = lib.types.str;
+      description = "Launch flags to pass to spotify.";
       default = "";
     };
-    alwaysEnableDevTools = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
+
+    experimentalFeatures = lib.mkOption {
+      type = lib.types.nullOr lib.types.bool;
+      default = null;
+      example = true;
+      description = ''
+        Whether to enable experimental features.
+      '';
     };
 
-    updateXpuiPredicate = lib.mkOption {
+    alwaysEnableDevTools = lib.mkEnableOption "chromium dev tools";
+
+    # If you have to use this you should probably make a PR instead
+    updateXpui = lib.mkOption {
       type = lib.types.either (lib.types.attrsOf lib.types.str) (
         lib.types.functionTo (lib.types.attrsOf lib.types.str)
       );
       default = { };
+      internal = true;
     };
   };
 
   config =
     let
-
       # take the list of extensions and turn strings into actual extensions
-      allExtensions = cfg.enabledExtensions ++ cfg.theme.requiredExtensions;
+      allExtensions = config.enabledExtensions ++ config.theme.requiredExtensions;
 
-      # custom spotify package with spicetify integrated in
-      spiced-spotify =
+      xpui =
         let
-          xpui =
-            let
-              xpui_ = {
+          xpui_ = {
+            AdditionalOptions = {
+              extensions = lib.concatMapStringsSep "|" (item: item.name) allExtensions;
+              custom_apps = lib.concatMapStringsSep "|" (item: item.name) config.enabledCustomApps;
+              # must be disabled on newer spotify
+              sidebar_config = false;
 
-                AdditionalOptions = {
-                  extensions = lib.concatMapStringsSep "|" (item: item.name) allExtensions;
-                  custom_apps = lib.concatMapStringsSep "|" (item: item.name) cfg.enabledCustomApps;
-                  # must be disabled on newer spotify
-                  sidebar_config = false;
+              home_config = config.theme.homeConfig;
 
-                  home_config = cfg.theme.homeConfig;
-
-                  experimental_features = lib.any (item: (item.experimentalFeatures or false)) allExtensions;
-                };
-
-                Setting = {
-                  spotify_path = "__SPOTIFY__";
-                  prefs_path = "__PREFS__";
-                  inject_theme_js = cfg.theme.injectThemeJs;
-                  replace_colors = cfg.theme.replaceColors;
-                  check_spicetify_update = false;
-                  current_theme = cfg.theme.name;
-                  color_scheme = cfg.colorScheme;
-                  inject_css = cfg.theme.injectCss;
-                  overwrite_assets = cfg.theme.overwriteAssets;
-                  spotify_launch_flags = cfg.spotifyLaunchFlags;
-                  always_enable_devtools = cfg.alwaysEnableDevTools;
-                };
-
-                Patch = cfg.theme.patches or { };
-
-                Preprocesses = {
-                  disable_ui_logging = true;
-                  remove_rtl_rule = true;
-                  expose_apis = true;
-                  disable_sentry = true;
-                };
-
-                Backup = {
-                  inherit (cfg.spotifyPackage) version;
-                  "with" = cfg.spicetifyPackage.version;
-                };
-              };
-            in
-            if (lib.isFunction cfg.updateXpuiPredicate) then
-              cfg.updateXpuiPredicate xpui_
-            else if (lib.isAttrs cfg.updateXpuiPredicate && cfg.updateXpuiPredicate != { }) then
-              cfg.updateXpuiPredicate
-            else
-              xpui_;
-
-          pre = spicePkgs.spicetifyBuilder {
-            spotify = cfg.spotifyPackage;
-            spicetify-cli = cfg.spicetifyPackage;
-            extensions = allExtensions;
-            apps = cfg.enabledCustomApps;
-            theme = cfg.theme // {
-              additionalCss = lib.concatLines ([ (cfg.theme.additionalCss or "") ] ++ cfg.enabledSnippets);
+              experimental_features =
+                if config.experimentalFeatures != null then
+                  config.experimentalFeatures
+                else
+                  lib.any (item: (item.experimentalFeatures or false)) allExtensions;
             };
-            inherit (cfg) customColorScheme extraCommands;
-            # compose the configuration as well as options required by extensions and
-            # cfg.cfg.xpui into one set
-            config-xpui = xpui;
+
+            Setting = {
+              spotify_path = "__SPOTIFY__";
+              prefs_path = "__PREFS__";
+              inject_theme_js = config.theme.injectThemeJs;
+              replace_colors = config.theme.replaceColors;
+              check_spicetify_update = false;
+              current_theme = config.theme.name;
+              color_scheme = config.colorScheme;
+              inject_css = config.theme.injectCss;
+              overwrite_assets = config.theme.overwriteAssets;
+              spotify_launch_flags = config.spotifyLaunchFlags;
+              always_enable_devtools = config.alwaysEnableDevTools;
+            };
+
+            Patch = config.theme.patches or { };
+
+            Preprocesses = {
+              disable_ui_logging = true;
+              remove_rtl_rule = true;
+              expose_apis = true;
+              disable_sentry = true;
+            };
+
+            Backup = {
+              inherit (config.spotifyPackage) version;
+              "with" = "Dev";
+            };
           };
         in
+        if (lib.isFunction config.updateXpui) then
+          config.updateXpui xpui_
+        else if (lib.isAttrs config.updateXpui && config.updateXpui != { }) then
+          config.updateXpui
+        else
+          xpui_;
 
-        assert lib.assertMsg (!(pkgs.stdenv.isDarwin && cfg.windowManagerPatch)) ''
-          Spotifywm does not support darwin
-        '';
-        assert lib.assertMsg (cfg.spotifyPackage.pname != "spotifywm") ''
-          Do not set spotifyPackage to pkgs.spotifywm
-          instead enable windowManagerPatch and set spotifywmPackage
-        '';
+    in
 
-        if cfg.windowManagerPatch then
-          (cfg.spotifywmPackage.override { spotify = pre; }).overrideAttrs (old: {
-            passthru = (old.passthru or { }) // pre.passthru;
+    {
+      spicedSpotify =
+        let
+          spicedSpotify' = spicePkgs.spicetifyBuilder {
+            spotify = config.spotifyPackage;
+            spicetify-cli = config.spicetifyPackage;
+            extensions = allExtensions;
+            apps = config.enabledCustomApps;
+            theme = config.theme // {
+              additionalCss = lib.concatLines ([ (config.theme.additionalCss or "") ] ++ config.enabledSnippets);
+            };
+            inherit (config) customColorScheme extraCommands colorScheme;
+            # compose the configuration as well as options required by extensions and
+            # config.config.xpui into one set
+            config-xpui = xpui;
+            wayland = if pkgs.stdenv.isLinux then config.wayland else null;
+          };
+        in
+        if pkgs.stdenv.isLinux && config.windowManagerPatch then
+          (config.spotifywmPackage.override { spotify = spicedSpotify'; }).overrideAttrs (old: {
+            passthru = (old.passthru or { }) // spicedSpotify'.passthru;
           })
         else
-          pre;
-    in
-    lib.mkIf cfg.enable (
-      lib.mkMerge [
-        {
-          programs.spicetify = {
-            spicedSpotify = spiced-spotify;
-            createdPackages = [ spiced-spotify ] ++ cfg.theme.extraPkgs;
-          };
-        }
-        (lib.mkIf (!cfg.dontInstall) (
-          if isNixOSModule then
-            { environment.systemPackages = cfg.createdPackages; }
-          else
-            { home.packages = cfg.createdPackages; }
-        ))
-      ]
-    );
+          spicedSpotify';
 
-  _file = ./module.nix;
+    };
+  _file = ./common.nix;
 }

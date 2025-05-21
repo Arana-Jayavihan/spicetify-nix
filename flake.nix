@@ -6,63 +6,54 @@
       repo = "nixpkgs";
       ref = "nixos-unstable";
     };
-
-    flake-compat = {
+    systems = {
       type = "github";
-      owner = "edolstra";
-      repo = "flake-compat";
-      flake = false;
+      owner = "nix-systems";
+      repo = "default";
     };
   };
 
   outputs =
-    { self, nixpkgs, ... }:
+    {
+      self,
+      nixpkgs,
+      systems,
+      ...
+    }:
     let
       inherit (nixpkgs) lib;
-      withSystem =
-        f:
-        lib.fold lib.recursiveUpdate { } (
-          map f [
-            "aarch64-darwin"
-            "aarch64-linux"
-            "x86_64-darwin"
-            "x86_64-linux"
-          ]
-        );
+      eachSystem = f: lib.genAttrs (import systems) (s: f nixpkgs.legacyPackages.${s});
     in
-    withSystem (
-      system:
-      let
-        pkgs = nixpkgs.legacyPackages.${system};
-      in
-      {
-        homeManagerModules = {
-          spicetify = import "${self}/module.nix" {
-            inherit self;
-            isNixOSModule = false;
+    {
+      lib = import ./lib { inherit lib self; };
+
+      legacyPackages = eachSystem (
+        pkgs:
+        import ./pkgs {
+          inherit pkgs self;
+          unfreePkgs = import nixpkgs {
+            inherit (pkgs.stdenv) system;
+            config.allowUnfreePredicate = pkg: (lib.getName pkg == "spotify");
           };
-          default = self.homeManagerModules.spicetify;
+        }
+      );
+
+      formatter = eachSystem (pkgs: pkgs.nixfmt-rfc-style);
+
+      devShells = eachSystem (pkgs: {
+        default = pkgs.mkShellNoCC { packages = [ pkgs.npins ]; };
+        fetcher = pkgs.mkShell {
+          packages = builtins.attrValues { inherit (pkgs) rust-analyzer clippy rustfmt; };
+          inputsFrom = [ self.legacyPackages.${pkgs.stdenv.system}.fetcher ];
         };
-
-        nixosModules = {
-          spicetify = import "${self}/module.nix" {
-            inherit self;
-            isNixOSModule = true;
-          };
-          default = self.nixosModules.spicetify;
+        docs = pkgs.mkShellNoCC {
+          # use npm run dev
+          packages = [
+            pkgs.nodejs
+          ];
+          env.SPICETIFY_OPTIONS_JSON = self.legacyPackages.${pkgs.stdenv.system}.docs.optionsJSON;
         };
-
-        legacyPackages.${system} = import "${self}/pkgs" { inherit pkgs self; };
-
-        formatter.${system} = pkgs.nixfmt-rfc-style;
-
-        devShells.${system} = {
-          default = pkgs.mkShellNoCC { packages = [ pkgs.npins ]; };
-          fetcher = pkgs.mkShell {
-            packages = builtins.attrValues { inherit (pkgs) rust-analyzer clippy rustfmt; };
-            inputsFrom = [ self.legacyPackages.${system}.fetcher ];
-          };
-        };
-      }
-    );
+      });
+    }
+    // import ./modules self;
 }

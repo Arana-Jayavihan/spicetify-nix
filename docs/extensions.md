@@ -1,5 +1,10 @@
-# Extensions
+---
+title: Extensions
+---
+# {{ $frontmatter.title }}
+
 ## Using unpackaged extensions
+
 ```nix
 programs.spicetify.enabledExtensions = [
   ({
@@ -18,13 +23,10 @@ programs.spicetify.enabledExtensions = [
 ];
 ```
 
-Almost all extension PR's will be merged quickly
-view the git history of /pkgs/extensions.nix for PR examples
-
+Almost all extension PR's will be merged quickly view the git history of
+/pkgs/extensions.nix for PR examples
 
 ## Official Extensions
-
-
 
 ### autoSkipExplicit
 
@@ -45,7 +47,8 @@ Shows the song cover, title, and artist in fullscreen.
 
 ### keyboardShortcut
 
-Vimium-like navigation of spotify. See keyboard shortcuts [here.](https://spicetify.app/docs/advanced-usage/extensions#keyboard-shortcut)
+Vimium-like navigation of spotify. See keyboard shortcuts
+[here.](https://spicetify.app/docs/advanced-usage/extensions#keyboard-shortcut)
 
 ### loopyLoop
 
@@ -65,7 +68,8 @@ Throw artists or songs in the trash, and permanently skip them.
 
 ### webnowplaying
 
-Only useful to windows/rainmeter users, I think. [Reference](https://spicetify.app/docs/advanced-usage/extensions#web-now-playing)
+Only useful to windows/rainmeter users, I think.
+[Reference](https://spicetify.app/docs/advanced-usage/extensions#web-now-playing)
 
 ## Community Extensions
 
@@ -100,7 +104,8 @@ the lyrics-plus customapp.
 
 ### goToSong
 
-Adds an option to the profile menu to go to the currently playing song or playlist.
+Adds an option to the profile menu to go to the currently playing song or
+playlist.
 
 ### listPlaylistsWithSong
 
@@ -189,7 +194,8 @@ create a duplicate of the playlist in your own library.
 
 ### autoSkip
 
-Automatically skip certain songs by category, such as remixes, or christmas songs.
+Automatically skip certain songs by category, such as remixes, or christmas
+songs.
 
 ### fullScreen
 
@@ -206,7 +212,9 @@ more fine control of volume.
 
 ### copyLyrics
 
-Copy the lyrics of your song directly from the "Show Lyrics" view. Click and drag your mouse accross the lyrics, then release to copy them into your clipboard.
+Copy the lyrics of your song directly from the "Show Lyrics" view. Click and
+drag your mouse accross the lyrics, then release to copy them into your
+clipboard.
 
 ### playingSource
 
@@ -226,12 +234,44 @@ Automatically skip tracks after they reach a timestamp.
 
 ### beautifulLyrics
 
-Beautiful Lyrics provides Lyrics to EVERYONE for FREE. Beautiful Lyrics supports Karaoke, Line, and Statically synced lyrics with additional features like Background Vocals and Side Vocals.
+Beautiful Lyrics provides Lyrics to EVERYONE for FREE. Beautiful Lyrics supports
+Karaoke, Line, and Statically synced lyrics with additional features like
+Background Vocals and Side Vocals.
 
 ### addToQueueTop
 
-Adds the ability to add a track | playlist to the top of your Queue, instantly playing it after the currently playing track ends.
+Adds the ability to add a track | playlist to the top of your Queue, instantly
+playing it after the currently playing track ends.
 
 ### oneko
 
 cat follow mouse (real). A fork of oneko.js modified for Spicetify.
+
+### starRatings
+
+Rate your music out of 5 stars
+
+### queueTime
+
+Simply displays the time remaining in the current queue.
+
+### simpleBeautifulLyrics
+
+Enhance your full-screen song lyrics experience with this simple theme for
+Spotify lyrics page.
+
+### allOfArtist
+
+Create a playlist with all songs of an artist 
+
+### oldLikeButton
+
+Add the Old Like Button in tracklists 
+
+### oldCoverClick
+
+Restore the old behaviour of clicking on the album cover in the playback bar
+
+### bestMoment
+
+Let you select and listen to a specific segment of the track

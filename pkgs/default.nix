@@ -1,28 +1,55 @@
-{ pkgs, self }:
+{
+  pkgs ? import <nixpkgs> { },
+  unfreePkgs ? pkgs,
+  ...
+}@attrs:
 let
   inherit (pkgs) lib;
-  spicePkgs = self.legacyPackages.${pkgs.stdenv.system};
-  json = lib.importJSON "${self}/pkgs/generated.json";
+  json = lib.importJSON ./generated.json;
 in
-{
-  inherit (json) snippets;
-  fetcher = pkgs.callPackage ./fetcher { inherit self; };
-  sources = pkgs.callPackages "${self}/pkgs/npins/sources.nix" { };
-  spicetifyBuilder = pkgs.callPackage "${self}/pkgs/spicetifyBuilder.nix" { };
+lib.fix (
+  self:
+  let
+    callPackage = lib.callPackageWith (pkgs // self);
+    callPackages = lib.callPackagesWith (pkgs // self);
+  in
+  {
+    docs = callPackage ../docs/package.nix { inherit (attrs) self; };
+    inherit (json) snippets;
 
-  /*
-    Don't want to callPackage these because
-    override and overrideDerivation cause issues with the module options
-    plus why would you want to override the pre-existing packages
-    when they're so simple to make
-  */
-  extensions = import "${self}/pkgs/extensions.nix" {
-    inherit (spicePkgs) sources;
-    inherit lib;
-  };
-  themes = import "${self}/pkgs/themes.nix" {
-    inherit (spicePkgs) sources extensions;
-    inherit pkgs lib;
-  };
-  apps = import "${self}/pkgs/apps.nix" { inherit (spicePkgs) sources; };
-}
+    fetcher = callPackage ./fetcher { };
+    sources = callPackages ./npins/sources.nix { };
+    spicetifyBuilder = callPackage ./spicetifyBuilder.nix { };
+
+    /*
+      Don't want to callPackage these because
+      override and overrideDerivation cause issues with the module options
+      plus why would you want to override the pre-existing packages
+      when they're so simple to make
+    */
+    extensions = callPackages ./extensions.nix { };
+
+    themes = callPackages ./themes.nix { };
+
+    apps = callPackages ./apps.nix { };
+
+    test =
+      let
+        spiceLib = import ../lib {
+          inherit lib;
+          inherit (attrs) self;
+        };
+      in
+      spiceLib.mkSpicetify unfreePkgs {
+        enabledExtensions = builtins.attrValues {
+          inherit (self.extensions)
+            adblockify
+            hidePodcasts
+            shuffle
+            ;
+        };
+        theme = self.themes.catppuccin;
+        colorScheme = "mocha";
+      };
+  }
+)

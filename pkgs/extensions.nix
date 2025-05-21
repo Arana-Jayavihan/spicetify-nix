@@ -174,6 +174,21 @@ let
     name = "oneko.js";
   };
 
+  starRatings = {
+    src = "${sources.starRatingsSrc}/dist";
+    name = "star-ratings.js";
+  };
+
+  queueTime = {
+    src = "${sources.theblockbusterSrc}/QueueTime";
+    name = "QueueTime.js";
+  };
+
+  simpleBeautifulLyrics = {
+    src = "${sources.kamilooSrc}/extensions/simple-beautiful-lyrics/dist";
+    name = "simple-beautiful-lyrics.js";
+  };
+
   sanitizeName =
     lib.replaceStrings
       [
@@ -196,6 +211,22 @@ let
 in
 {
   inherit adblockify;
+  allOfArtist = {
+    src = sources.allOfArtistSrc;
+    name = "allOfArtist.js";
+  };
+  oldLikeButton = {
+    src = sources.oldLikeSrc;
+    name = "oldLikeButton.js";
+  };
+  oldCoverClick = {
+    src = "${sources.waddlePlaysSrc}/oldCoverClick";
+    name = "oldCoverClick.js";
+  };
+  bestMoment = {
+    src = "${sources.bestMomentSrc}/dist";
+    name = "best-moment.js";
+  };
 }
 // (lib.listToAttrs (
   map
@@ -258,6 +289,9 @@ in
       oldSidebar
       addToQueueTop
       oneko
+      starRatings
+      queueTime
+      simpleBeautifulLyrics
     ]
 
   )
@@ -279,3 +313,6 @@ in
 // (mkExtAlias "skipAfterTimestamp.js" skipAfterTimestamp)
 // (mkExtAlias "beautifulLyrics.js" beautifulLyrics)
 // (mkExtAlias "oneko.js" oneko)
+// (mkExtAlias "starRatings.js" starRatings)
+// (mkExtAlias "queueTime.js" queueTime)
+// (mkExtAlias "simpleBeautifulLyrics.js" simpleBeautifulLyrics)
